@@ -1,9 +1,17 @@
 locals {
   secrets = local.enabled ? var.secrets : {}
 
-  # Full secret name per key: explicit override, or "<prefix>/<key>".
+  # Effective per-secret values, computed with explicit null checks (avoid
+  # coalesce(null, null) which errors on older Terraform). A null kms_key_id
+  # falls through to the AWS-managed key.
   secret_names = {
-    for k, v in local.secrets : k => coalesce(v.name_override, "${local.prefix}/${k}")
+    for k, v in local.secrets : k => v.name_override != null ? v.name_override : "${local.prefix}/${k}"
+  }
+  secret_kms = {
+    for k, v in local.secrets : k => v.kms_key_id != null ? v.kms_key_id : var.kms_key_id
+  }
+  secret_recovery = {
+    for k, v in local.secrets : k => v.recovery_window_in_days != null ? v.recovery_window_in_days : var.recovery_window_in_days
   }
 
   # Subsets driving the auxiliary resources (all keyed by non-sensitive keys).
@@ -18,9 +26,8 @@ resource "aws_secretsmanager_secret" "this" {
   name        = local.secret_names[each.key]
   description = each.value.description
 
-  # Fall back to the module default, then to the AWS-managed key (null).
-  kms_key_id              = try(coalesce(each.value.kms_key_id, var.kms_key_id), null)
-  recovery_window_in_days = coalesce(each.value.recovery_window_in_days, var.recovery_window_in_days)
+  kms_key_id              = local.secret_kms[each.key]
+  recovery_window_in_days = local.secret_recovery[each.key]
 
   dynamic "replica" {
     for_each = each.value.replica_regions

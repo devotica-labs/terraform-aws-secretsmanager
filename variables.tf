@@ -40,9 +40,11 @@ variable "secrets" {
   default     = {}
 
   validation {
+    # Ternary (not ||) so the >= / <= comparisons never evaluate against a null
+    # — Terraform's || does not short-circuit.
     condition = alltrue([
       for k, v in var.secrets :
-      v.recovery_window_in_days == null || v.recovery_window_in_days == 0 || (v.recovery_window_in_days >= 7 && v.recovery_window_in_days <= 30)
+      v.recovery_window_in_days == null ? true : (v.recovery_window_in_days == 0 || (v.recovery_window_in_days >= 7 && v.recovery_window_in_days <= 30))
     ])
     error_message = "recovery_window_in_days must be 0 (force delete) or between 7 and 30."
   }
