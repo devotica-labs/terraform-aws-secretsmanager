@@ -1,0 +1,17 @@
+# CODEOWNERS for terraform-aws-secretsmanager
+#
+# This module manages secrets, their encryption keys, resource policies, and
+# rotation. Security owns the resource + input surface outright.
+#
+# Per Module-Repo Plan v1.3 §16 governance.
+
+# Default: every change requires both teams to approve.
+*                          @devotica-labs/cloud-leads @devotica-labs/security
+
+# Security-primary: the secret/policy/rotation config + inputs.
+/main.tf                   @devotica-labs/security @devotica-labs/cloud-leads
+/variables.tf              @devotica-labs/security @devotica-labs/cloud-leads
+
+# CI/CD pipelines.
+/.github/                  @devotica-labs/cloud-leads @devotica-labs/security
+/.github/workflows/        @devotica-labs/cloud-leads @devotica-labs/security

@@ -1,0 +1,13 @@
+# Trivy/tfsec ignores for terraform-aws-secretsmanager. AVD-prefixed IDs
+# (required when a resource is scanned through a module call) + justification.
+
+# AVD-AWS-0098 — "Secret is not encrypted with a customer-managed key".
+#
+# The module supports a customer-managed key (module-level `kms_key_id` or a
+# per-secret override) and the examples use one. When neither is supplied,
+# Secrets Manager still encrypts at rest with the AWS-managed
+# `aws/secretsmanager` key — a valid, zero-cost choice. We therefore make the
+# CMK opt-in rather than forcing it, and suppress the scanner's blanket flag.
+#
+# Defined at: main.tf  resource "aws_secretsmanager_secret" "this"  (kms_key_id)
+AVD-AWS-0098
