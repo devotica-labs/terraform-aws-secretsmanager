@@ -233,18 +233,18 @@ module "secrets" {
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.51.0 |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [aws_secretsmanager_secret.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret) | resource |
 | [aws_secretsmanager_secret_policy.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_policy) | resource |
 | [aws_secretsmanager_secret_rotation.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secretsmanager_secret_rotation) | resource |
@@ -252,7 +252,7 @@ module "secrets" {
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_block_public_policy"></a> [block\_public\_policy](#input\_block\_public\_policy) | Reject any attached resource policy that would grant public access. | `bool` | `true` | no |
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter joining the name-prefix segments. | `string` | `"-"` | no |
 | <a name="input_enabled"></a> [enabled](#input\_enabled) | Set to false to make this module a no-op (create nothing). | `bool` | `true` | no |
@@ -268,7 +268,7 @@ module "secrets" {
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_kms_key_ids"></a> [kms\_key\_ids](#output\_kms\_key\_ids) | Map of logical key → the KMS key ID encrypting each secret (null = AWS-managed key). |
 | <a name="output_rotation_enabled"></a> [rotation\_enabled](#output\_rotation\_enabled) | Map of logical key → whether Lambda rotation is configured. |
 | <a name="output_secret_arns"></a> [secret\_arns](#output\_secret\_arns) | Map of logical key → secret ARN. |
